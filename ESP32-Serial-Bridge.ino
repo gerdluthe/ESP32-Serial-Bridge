@@ -149,23 +149,6 @@ void setup() {
   esp_err_t esp_wifi_set_max_tx_power(50);  //lower WiFi Power
 }
 
-// String HTML = "<!DOCTYPE html>\
-
-const char indexHTML[] PROGMEM = R"=====(
-<!DOCTYPE html>
-<html>
- <head>
-  <title>Erstes Programm</title>
-  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-  <meta name=viewport content="width=device-width, initial-scale=1"> 
- </head>
- <body>
-            <h1 style="text-align: center;">Hallo ESP32</h1>
- clientIP
- </body>
-</html>;
-)=====" ;
-
 void handle_root() {
  clientIP=WiFi.localIP().toString();
  clientSSID=ssid;
@@ -188,10 +171,8 @@ void handle_root() {
   output += " ; "+String(UART_BAUD2)+" Baud";
   output += " ;  RX Pin: "+String(SERIAL2_RXPIN)+" , TX Pin: "+String(SERIAL2_TXPIN)+"<br></br>";
   
-  // output += String(glaubsnicht);
   wserver.send(200, "text/html", output);
  
- //wserver.send(200,"text/html", indexHTML);
 }
 
 void loop() 
@@ -233,7 +214,6 @@ wserver.handleClient();      // ################
           continue;
         }
       }
-
 
       
       //no free/disconnected spot so reject
