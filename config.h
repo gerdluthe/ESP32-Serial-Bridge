@@ -2,7 +2,7 @@
 // 
 //#define BLUETOOTH
 #define OTA_HANDLER 
-#define MODE_AP // phone connects directly to ESP
+#define MODE_STA // phone connects directly to ESP
 
 
 #define PROTOCOL_TCP
@@ -12,8 +12,8 @@ bool debug = true;
 #define VERSION "1.10"
 
 // For AP mode:
-const char *ssid = "LK8000";  // You will connect your phone to this Access Point
-const char *pw = "Flightcomputer"; // and this is the password
+const char *ssid = "dd-wrt";  // You will connect your phone to this Access Point
+const char *pw = "kleenex8192"; // and this is the password
 IPAddress ip(192, 168, 4, 1); // From RoboRemo app, connect to this IP
 IPAddress netmask(255, 255, 255, 0);
 
@@ -27,15 +27,15 @@ IPAddress netmask(255, 255, 255, 0);
 
 
 #define NUM_COM   3                 // total number of COM Ports
-#define DEBUG_COM 0                 // debug output to COM0
+#define DEBUG_COM 1                 // debug output to COM0
 /*************************  COM Port 0 *******************************/
-#define UART_BAUD0 19200            // Baudrate UART0
+#define UART_BAUD0 9600            // Baudrate UART0
 #define SERIAL_PARAM0 SERIAL_8N1    // Data/Parity/Stop UART0
 #define SERIAL0_RXPIN 21            // receive Pin UART0
 #define SERIAL0_TXPIN 1             // transmit Pin UART0
 #define SERIAL0_TCP_PORT 8880       // Wifi Port UART0
 /*************************  COM Port 1 *******************************/
-#define UART_BAUD1 19200            // Baudrate UART1
+#define UART_BAUD1 9600            // Baudrate UART1
 #define SERIAL_PARAM1 SERIAL_8N1    // Data/Parity/Stop UART1
 #define SERIAL1_RXPIN 16            // receive Pin UART1
 #define SERIAL1_TXPIN 17            // transmit Pin UART1

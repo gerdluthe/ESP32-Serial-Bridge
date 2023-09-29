@@ -9,10 +9,9 @@
 #include "config.h"
 #include <esp_wifi.h>
 #include <WiFi.h>
+#include <WebServer.h>
 
-
-
-
+WebServer wserver(80);
 #ifdef BLUETOOTH
 #include <BluetoothSerial.h>
 BluetoothSerial SerialBT; 
@@ -22,6 +21,9 @@ BluetoothSerial SerialBT;
 #include <ArduinoOTA.h> 
 
 #endif // OTA_HANDLER
+
+String clientIP = "192.168.1.180";
+const char* clientSSID = "your network";
 
 HardwareSerial Serial_one(1);
 HardwareSerial Serial_two(2);
@@ -48,7 +50,10 @@ uint8_t BTbuf[bufferSize];
 uint16_t iBT =0;
 
 
+
+
 void setup() {
+
 
   delay(500);
   
@@ -83,7 +88,10 @@ void setup() {
     if(debug) COM[DEBUG_COM]->print(".");
   }
   if(debug) COM[DEBUG_COM]->println("\nWiFi connected");
-  
+  wserver.on("/", handle_root);             // ###############
+  wserver.begin();
+
+
   #endif
 #ifdef BLUETOOTH
   if(debug) COM[DEBUG_COM]->println("Open Bluetooth Server");  
@@ -134,14 +142,63 @@ void setup() {
   if(debug) COM[DEBUG_COM]->println("Starting TCP Server 3");  
   server[2]->begin(); // start TCP server   
   server[2]->setNoDelay(true);
-  #endif
+
+ 
+   #endif
 
   esp_err_t esp_wifi_set_max_tx_power(50);  //lower WiFi Power
 }
 
+// String HTML = "<!DOCTYPE html>\
+
+const char indexHTML[] PROGMEM = R"=====(
+<!DOCTYPE html>
+<html>
+ <head>
+  <title>Erstes Programm</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name=viewport content="width=device-width, initial-scale=1"> 
+ </head>
+ <body>
+            <h1 style="text-align: center;">Hallo ESP32</h1>
+ clientIP
+ </body>
+</html>;
+)=====" ;
+
+void handle_root() {
+ clientIP=WiFi.localIP().toString();
+ clientSSID=ssid;
+  String output = "<h1>RS232 to WiFi Converter (ESP32 und MAX3232) </h1> ";
+  output += " IP Adresse Node: ";
+  output += String(clientIP);
+  output += "<br></br>";
+  output += "Verbunden mit: ";
+  output += String(clientSSID)+"<br></br>";
+  output += "COM0: TCP Port: ";
+  output += String(SERIAL0_TCP_PORT);
+  output += " ; "+String(UART_BAUD0)+" Baud";
+  output += " ;  RX Pin: "+String(SERIAL0_RXPIN)+" , TX Pin: "+String(SERIAL0_TXPIN)+"<br></br>";
+  output += "COM1: TCP Port: ";
+  output += String(SERIAL1_TCP_PORT);
+  output += " ; "+String(UART_BAUD1)+" Baud";
+  output += " ;  RX Pin: "+String(SERIAL1_RXPIN)+" , TX Pin: "+String(SERIAL1_TXPIN)+"<br></br>";
+  output += "COM2: TCP Port: ";
+  output += String(SERIAL2_TCP_PORT);
+  output += " ; "+String(UART_BAUD2)+" Baud";
+  output += " ;  RX Pin: "+String(SERIAL2_RXPIN)+" , TX Pin: "+String(SERIAL2_TXPIN)+"<br></br>";
+  
+  // output += String(glaubsnicht);
+  wserver.send(200, "text/html", output);
+ 
+ //wserver.send(200,"text/html", indexHTML);
+}
 
 void loop() 
 {  
+
+wserver.handleClient();      // ################
+
 #ifdef OTA_HANDLER  
   ArduinoOTA.handle();
 #endif // OTA_HANDLER
@@ -176,6 +233,9 @@ void loop()
           continue;
         }
       }
+
+
+      
       //no free/disconnected spot so reject
       WiFiClient TmpserverClient = server[num]->available();
       TmpserverClient.stop();
@@ -225,4 +285,3 @@ void loop()
     }    
   }
 }
-
