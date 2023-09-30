@@ -152,24 +152,35 @@ void setup() {
 void handle_root() {
  clientIP=WiFi.localIP().toString();
  clientSSID=ssid;
-  String output = "<h1>RS232 to WiFi Converter (ESP32 und MAX3232) </h1> ";
-  output += " IP Adresse Node: ";
-  output += String(clientIP);
-  output += "<br></br>";
-  output += "Verbunden mit: ";
-  output += String(clientSSID)+"<br></br>";
-  output += "COM0: TCP Port: ";
+  String output = "<head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><link rel=\"icon\" href=\"data:,\">";
+  output += "<style>body { text-align: center; font-family: \"Trebuchet MS\", Arial;}";
+  output += "table { border-collapse: collapse; width:35%; margin-left:auto; margin-right:auto; }";
+  output += "th { padding: 12px; background-color: #0043af; color: white; }tr { border: 1px solid #ddd; padding: 12px; }tr:hover { background-color: #bcbcbc; }";
+  output += "td { border: none; padding: 12px; }.sensor { color:white; font-weight: bold; background-color: #bcbcbc; padding: 1px; }";
+  output += "</style></head><body><h1>RS232 to WiFi Converter ESP32</h1>";
+  output += "<table><tr><th>Konfiguration:</th><th>";
+  output += "<tr><td>IP Adresse</td><td><span class=\"sensor\">";
+  output += String(clientIP)+"</span></td></tr>";
+  output += "<tr><td>Verbunden mit</td><td><span class=\"sensor\">";
+  output += String(clientSSID);
+  output +="</span></td></tr>";
+  output +="<tr><td>COM0: TCP Port:</td><td><span class=\"sensor\">";
   output += String(SERIAL0_TCP_PORT);
   output += " ; "+String(UART_BAUD0)+" Baud";
-  output += " ;  RX Pin: "+String(SERIAL0_RXPIN)+" , TX Pin: "+String(SERIAL0_TXPIN)+"<br></br>";
-  output += "COM1: TCP Port: ";
+  output += " ;  RX Pin: "+String(SERIAL0_RXPIN)+" , TX Pin: "+String(SERIAL0_TXPIN);
+  output +="</span></td></tr>";
+  output +="<tr><td>COM1: TCP Port:</td><td><span class=\"sensor\">";
   output += String(SERIAL1_TCP_PORT);
   output += " ; "+String(UART_BAUD1)+" Baud";
-  output += " ;  RX Pin: "+String(SERIAL1_RXPIN)+" , TX Pin: "+String(SERIAL1_TXPIN)+"<br></br>";
-  output += "COM2: TCP Port: ";
+  output += " ;  RX Pin: "+String(SERIAL1_RXPIN)+" , TX Pin: "+String(SERIAL1_TXPIN);
+  output +="</span></td></tr>";
+  output +="<tr><td>COM2: TCP Port:</td><td><span class=\"sensor\">";
   output += String(SERIAL2_TCP_PORT);
   output += " ; "+String(UART_BAUD2)+" Baud";
-  output += " ;  RX Pin: "+String(SERIAL2_RXPIN)+" , TX Pin: "+String(SERIAL2_TXPIN)+"<br></br>";
+  output += " ;  RX Pin: "+String(SERIAL2_RXPIN)+" , TX Pin: "+String(SERIAL2_TXPIN);
+  output +="</span></td></tr>";
+  
+  
   
   wserver.send(200, "text/html", output);
  
