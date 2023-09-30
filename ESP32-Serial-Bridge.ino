@@ -23,6 +23,7 @@ BluetoothSerial SerialBT;
 #endif // OTA_HANDLER
 
 String clientIP = "192.168.1.180";
+String hostname = "ESP32toRS232";
 const char* clientSSID = "your network";
 
 HardwareSerial Serial_one(1);
@@ -65,11 +66,13 @@ void setup() {
   #ifdef MODE_AP 
    if(debug) COM[DEBUG_COM]->println("Open ESP Access Point mode");
   //AP mode (phone connects directly to ESP) (no router)
+  WiFi.setHostname(hostname.c_str());
   WiFi.mode(WIFI_AP);
    
   WiFi.softAP(ssid, pw); // configure ssid and password for softAP
   delay(2000); // VERY IMPORTANT
   WiFi.softAPConfig(ip, ip, netmask); // configure ip address for softAP
+ 
 
   #endif
 
@@ -79,6 +82,7 @@ void setup() {
   // STATION mode (ESP connects to router and gets an IP)
   // Assuming phone is also connected to that router
   // from RoboRemo you must connect to the IP of the ESP
+  WiFi.setHostname(hostname.c_str());
   WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, pw);
   if(debug) COM[DEBUG_COM]->print("try to Connect to Wireless network: ");
@@ -88,6 +92,7 @@ void setup() {
     if(debug) COM[DEBUG_COM]->print(".");
   }
   if(debug) COM[DEBUG_COM]->println("\nWiFi connected");
+  
   wserver.on("/", handle_root);             // ###############
   wserver.begin();
 
